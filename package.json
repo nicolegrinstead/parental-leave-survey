@@ -1,0 +1,27 @@
+{
+  "name": "matpat-survey",
+  "version": "0.0.1",
+  "description": "A form to collect and share maternity and paternity data",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "ejs": "2.3.4",
+    "express": "4.13.3",
+    "pg": "4.4.3"
+  },
+  "engines": {
+    "node": "4.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:nicolegrinstead/matpat-survey.git"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "license": "MIT"
+}

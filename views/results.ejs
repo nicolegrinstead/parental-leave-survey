@@ -1,0 +1,62 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+	<header class="navbar">
+  	<ul class="nav">
+      <li><a href ="/">Survey</a></li>
+      <li><a href ="/results">Results</a></li>
+      <li><a href ="/about">About</a></li>
+		</ul>
+	</header>
+  <div class="wide-main short-body">
+    <hr>
+    <h1>Results:</h1>
+    <p style="margin-left:20px;">(Full results coming soon)</p>
+    <div id="results" class="margin-left-20">
+      <% if (error) { %>
+        <div class="alert">
+          <%= error %>
+        </div>
+      <% } else { %>
+        <!-- <button class="sort" data-sort="company-name">Sort</button> -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <td>Company Name</td>
+              <td>Pronoun of respondant</td>
+              <td>Maternity paid weeks</td>
+              <td>Paternity paid weeks</td>
+              <td>Adoptive paid weeks</td>
+              <td>Leave weeks taken<td>
+            <tr>
+          </thead>
+          <tbody class="list">
+            <% for (var key in survey) { %>
+              <% if (survey[key]) { %>
+                <tr>
+                  <td><%= survey[key].companyName %></td>
+                  <td><%= survey[key].pronoun %></td>
+                  <td><%= survey[key].maternityPaidWeeks %></td>
+                  <td><%= survey[key].paternityPaidWeeks %></td>
+                  <td><%= survey[key].adoptivePaidWeeks %></td>
+                  <td><%= survey[key].leaveWeeksTaken %></td>
+                </tr>
+              <% } %>
+            <% } %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+  <br/>
+</body>
+</html>
+<script src="/js/list.min.js"></script>
+<script>
+var options = {
+  valueNames: [ "company-name" ]
+};
+var resultsList = new List("results", options);
+</script>

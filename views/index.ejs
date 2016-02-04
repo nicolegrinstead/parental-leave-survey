@@ -1,0 +1,351 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+	<header class="navbar">
+  	<ul class="nav">
+			<li><a href ="/">Survey</a></li>
+			<li><a href ="/results">Results</a></li>
+      <li><a href ="/about">About</a></li>
+		</ul>
+	</header>
+  <div class="main">
+    <hr>
+    <h1>Parental Leave Policies</h1>
+    <% if (errors.messages) { %>
+      <div class="alert">
+        <ul>
+          <% for(var i=0; i<errors.messages.length; i++) {%>
+            <li><%= errors.messages[i] %></li>
+          <% } %>
+        </ul>
+      </div>
+    <% } %>
+    <form action="survey-submit" method="POST">
+      <div class="form-group">
+        <label for="companyName" class="form-label">Company Name<span class="red">*</span>:</label>
+        <input type="text" name="survey[companyName]" id="companyName" class="form-input" value="<%= survey.companyName %>"></input>
+      </div>
+      <div class="form-group">
+        <label for="equity" class="form-label">Your preferred pronoun<span class="red">*</span>:</label>
+        <div class="radio"  id="pronoun-group">
+          <label>
+            <input type="radio" name="survey[pronoun]" value="he" <% if (survey.pronoun=="he") { %> checked <% } %>> He
+          </label>
+          <label>
+            <input type="radio" name="survey[pronoun]" value="she" <% if (survey.pronoun=="she") { %> checked <% } %>> She
+          </label>
+          <label>
+            <input type="radio" name="survey[pronoun]" value="ze" <% if (survey.pronoun=="ze") { %> checked <% } %>> Ze
+          </label>
+          <label>
+            <input type="radio" name="survey[pronoun]" value="other" id ="pronoun"<% if (survey.pronoun=="other") { %> checked <% } %>> Other
+          </label>                  
+        </div>
+        <input type="text" name="survey[pronounOther]" id="pronounOther" class="form-input"value="<%= survey.pronounOther %>"></input>
+      </div>
+      <div class="form-group">
+        <label for="equity" class="form-label">Your age range<span class="red">*</span>:</label>
+        <div class="radio"  id="age-group">
+          <label>
+            <input type="radio" name="survey[age]" value="Under 24" <% if (survey.age=="Under 24") { %> checked <% } %>> Under 24
+          </label>
+          <label>
+            <input type="radio" name="survey[age]" value="25 - 34" <% if (survey.age=="25 - 34") { %> checked <% } %>> 25 - 34
+          </label>
+          <label>
+            <input type="radio" name="survey[age]" value="35 - 44" <% if (survey.age=="35 - 44") { %> checked <% } %>> 35 - 44
+          </label>
+          <label>
+            <input type="radio" name="survey[age]" value="45 - 54" <% if (survey.age=="45 - 54") { %> checked <% } %>> 45 - 54
+          </label>
+          <label>
+            <input type="radio" name="survey[age]" value="55 - 64" <% if (survey.age=="55 - 64") { %> checked <% } %>> 55 - 64
+          </label>       
+          <label>
+            <input type="radio" name="survey[age]" value="Over 65" <% if (survey.age=="Over 65") { %> checked <% } %>> Over 65
+          </label>                               
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="leaveType" class="form-label">Which parental leave policy would you like to add (check all that apply)<span class="red">*</span>?</label>
+        <div class="checkbox">
+          <label>
+            <input id ="maternityPolicy" type="checkbox" name="survey[leaveType]" value="maternity" <% if ( survey.leaveType && survey.leaveType.indexOf("maternity") > -1 ) { %> checked <% } %>> 
+            Maternity
+          </label>
+          <label>
+            <input id="paternityPolicy" type="checkbox" name="survey[leaveType]" value="paternity" <% if ( survey.leaveType && survey.leaveType.indexOf("paternity") > -1 ) { %> checked <% } %>> 
+            Paternity
+          </label>
+          <label>
+            <input id="adoptivePolicy" type="checkbox" name="survey[leaveType]" value="adoptive" <% if ( survey.leaveType && survey.leaveType.indexOf("adoptive") > -1 ) { %> checked <% } %>> 
+            Adoptive
+          </label>         
+        </div>
+      </div>
+      <div id="maternityWeeks" class="form-group hidden" >
+        <div><label class="form-label bold">Maternity:</label></div>
+        <div class="thirds">
+          <label for="maternityPaidWeeks" class="form-label">Number of paid weeks:</label>
+          <input type="number" name="survey[maternityPaidWeeks]" id="maternityPaidWeeks" class="form-input" min="0" max="52" value="<%= survey.maternityPaidWeeks %>"></input>        
+        </div>
+        <div class="thirds">
+          <label for="maternityPercentPay" class="form-label">Percentage of pay:</label>
+          <input type="number" name="survey[maternityPercentPay]" id="maternityPercentPay" class="form-input" min="0" max="100" value="<%= survey.maternityPercentPay %>"></input>        
+        </div>
+        <div class="thirds">
+          <label for="maternityUnPaidWeeks" class="form-label">Number of unpaid weeks:</label>
+          <input type="number" name="survey[maternityUnPaidWeeks]" id="maternityUnPaidWeeks" class="form-input" min="0" value="<%= survey.maternityUnPaidWeeks %>"></input>        
+        </div>
+      </div>
+      <div id="paternityWeeks" class="form-group hidden">
+        <div><label class="form-label bold">Paternity:</label></div>
+        <div class="thirds">
+          <label for="paternityPaidWeeks" class="form-label">Number of paid weeks:</label>
+          <input type="number" name="survey[paternityPaidWeeks]" id="paternityPaidWeeks" class="form-input" min="0" max="52" value="<%= survey.paternityPaidWeeks %>"></input>        
+        </div>
+        <div class="thirds">
+          <label for="paternityPercentPay" class="form-label">Percentage of pay:</label>
+          <input type="number" name="survey[paternityPercentPay]" id="paternityPercentPay" class="form-input" min="0" max="100" value="<%= survey.paternityPercentPay %>"></input>        
+        </div>
+        <div class="thirds">
+          <label for="paternityUnPaidWeeks" class="form-label">Number of unpaid weeks:</label>
+          <input type="number" name="survey[paternityUnPaidWeeks]" id="paternityUnPaidWeeks" class="form-input" min="0" value="<%= survey.paternityUnPaidWeeks %>"></input>        
+        </div>
+      </div>
+      <div id="adoptiveWeeks" class="form-group hidden">
+        <div><label class="form-label bold">Adoptive:</label></div>
+        <div class="thirds">
+          <label for="adoptivePaidWeeks" class="form-label">Number of paid weeks:</label>
+          <input type="number" name="survey[adoptivePaidWeeks]" id="adoptivePaidWeeks" class="form-input" min="0" max="52" value="<%= survey.adoptivePaidWeeks %>"></input>        
+        </div>
+        <div class="thirds">
+          <label for="adoptivePercentPay" class="form-label">Percentage of pay:</label>
+          <input type="number" name="survey[adoptivePercentPay]" id="adoptivePercentPay" class="form-input" min="0" max="100" value="<%= survey.adoptivePercentPay %>"></input>        
+        </div>
+        <div class="thirds">
+          <label for="adoptiveUnPaidWeeks" class="form-label">Number of unpaid weeks:</label>
+          <input type="number" name="survey[adoptiveUnPaidWeeks]" id="adoptiveUnPaidWeeks" class="form-input" min="0" value="<%= survey.adoptiveUnPaidWeeks %>"></input>        
+        </div>
+      </div>      
+      <div class="form-group">
+        <label for="weeksTaken" class="form-label">If you have taken leave at this company, how many weeks did you take?</label>
+        <input type="number" name="survey[weeksTaken]" id="weeksTaken" class="form-input" min="0" max="52" value="<%= survey.weeksTaken %>"></input>
+      </div>
+      <div class="form-group">
+        <label for="equity" class="form-label">If you have equity, would your stock vest at 100% during the entirety of your parental leave?</label>
+        <div class="radio"  id="equity-group">
+          <label>
+            <input type="radio" name="survey[equity]" value="yes" <% if (survey.equity=="yes") { %> checked <% } %>> Yes
+          </label>
+          <label>
+            <input type="radio" name="survey[equity]" value="no" <% if (survey.equity=="no") { %> checked <% } %>> No
+          </label>
+          <label>
+            <input type="radio" name="survey[equity]" value="n/a" <% if (survey.equity=="n/a") { %> checked <% } %>> N/A
+          </label>
+          <label>
+            <input type="radio" name="survey[equity]" value="other" id ="equity"<% if (survey.equity=="other") { %> checked <% } %>> Other
+          </label>                  
+        </div>
+        <input type="text" name="survey[equityOther]" id="equityOther" class="form-input"value="<%= survey.equityOther %>"></input>
+      </div>
+      <div class="form-group">
+        <label for="equalLeave" class="form-label">Does everyone at your company receive the same amount of maternity and paternity leave, regardless of tenure, title, or other distinguishing characteristics?</label>
+        <div class="radio" id="equalLeave-group">
+          <label>
+            <input type="radio" name="survey[equalLeave]" value="yes" <% if (survey.equalLeave=="yes") { %> checked <% } %>> Yes
+          </label>
+          <label>
+            <input type="radio" name="survey[equalLeave]" value="no" <% if (survey.equalLeave=="no") { %> checked <% } %>> No
+          </label>
+          <label>
+            <input type="radio" name="survey[equalLeave]" id="equalLeave" value="other" <% if (survey.equalLeave=="other") { %> checked <% } %>> Other
+          </label>                  
+        </div>
+        <input type="text" name="survey[equalLeaveOther]" id="equalLeaveOther" class="form-input"value="<%= survey.equalLeaveOther %>"></input>
+      </div>
+      <div class="form-group">
+        <label for="flexTime" class="form-label">When parents return from parental leave, can they temporarily work a flexible or part time schedule?</label>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="survey[flexTime]" value="maternity" <% if ( survey.flexTime && survey.flexTime.indexOf("maternity") > -1 ) { %> checked <% } %>> 
+            Maternity
+          </label>
+          <label>
+            <input type="checkbox" name="survey[flexTime]" value="paternity" <% if ( survey.flexTime && survey.flexTime.indexOf("paternity") > -1 ) { %> checked <% } %>> 
+            Paternity
+          </label>
+          <label>
+            <input type="checkbox" name="survey[flexTime]" value="adoptive" <% if ( survey.flexTime && survey.flexTime.indexOf("adoptive") > -1 ) { %> checked <% } %>> 
+            Adoptive
+          </label>      
+            <input type="checkbox" name="survey[flexTime]" value="no" <% if ( survey.flexTime && survey.flexTime.indexOf("no") > -1 ) { %> checked <% } %>> 
+            No
+          </label>    
+          <label>
+            <input type="checkbox" name="survey[flexTime]" value="other" id="flexTime" <% if ( survey.flexTime && survey.flexTime.indexOf("other") > -1 ) { %> checked <% } %>> 
+            Other
+          </label>      
+        </div>
+        <input type="text" name="survey[flexTimeOther]" id="flexTimeOther" class="form-input"value="<%= survey.flexTimeOther %>"></input>
+      </div>
+      <div class="form-group">
+        <label for="equalLeave" class="form-label">When parents return from parental leave, are they provided with coaching to support their transition back to work?</label>
+        <div class="radio" id="onRamp-group">
+          <label>
+            <input type="radio" name="survey[onRamp]" value="yes" <% if (survey.onRamp=="yes") { %> checked <% } %>> Yes
+          </label>
+          <label>
+            <input type="radio" name="survey[onRamp]" value="no" <% if (survey.onRamp=="no") { %> checked <% } %>> No
+          </label>
+          <label>
+            <input type="radio" name="survey[onRamp]" id="onRamp" value="onRamp" <% if (survey.onRamp=="other") { %> checked <% } %>> Other
+          </label>   
+          <input type="text" name="survey[onRampOther]" id="onRampOther" class="form-input"value="<%= survey.onRampOther %>"></input>               
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="equalLeave" class="form-label">In your opinion, does male leadership (VP or above) take the full parental leave? </label>
+        <label for="maleVpRange">0 - No Leave</label>
+        <input type="range" id ="maleVpRange" name="survey[maleVpLeave]" min="0" max="7" value="<%= survey.maleVpLeave %>" class="range">
+        <label for="maleVpRange">7 - Full Leave</label>             
+      </div>
+      <div class="form-group">
+        <label for="equalLeave" class="form-label">In your opinion, does female leadership (VP or above) take the full parental leave? </label>
+        <label for="femaleVpRange">0 - No Leave</label>
+        <input type="range" id ="femaleVpRange" name="survey[femaleVpLeave]" min="0" max="7" value="<%= survey.femaleVpLeave %>" class="range">
+        <label for="femaleVpRange">7 - Full Leave</label>
+      </div>
+      <div class="form-group">
+        <label for="childCare" class="form-label">Is there onsite childcare or is childcare subsidized? </label>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"  name="survey[childCare]" value="onsite" <% if ( survey.childCare && survey.childCare.indexOf("onsite") > -1 ) { %> checked <% } %>> 
+            Onsite childcare
+          </label>
+          <label>
+            <input type="checkbox"  name="survey[childCare]" value="subsidized" <% if ( survey.childCare && survey.childCare.indexOf("subsidized") > -1 ) { %> checked <% } %>> 
+            Subsidized childcare
+          </label>
+          <label>
+            <input type="checkbox"  name="survey[childCare]" value="no" <% if ( survey.childCare && survey.childCare.indexOf("no") > -1 ) { %> checked <% } %>> 
+            No
+          </label>          
+          <label>
+            <input type="checkbox"  name="survey[childCare]" value="other" id="childCare" <% if ( survey.childCare && survey.childCare.indexOf("other") > -1 ) { %> checked <% } %>> 
+            Other
+          </label>      
+        </div>
+        <input type="text" name="survey[childCareOther]" id="childCareOther" class="form-input"value="<%= survey.childCareOther %>"></input>               
+      </div>
+      <div class="form-group">
+        <label for="backupChildCare" class="form-label">Does your company offer back-up care options for emergencies (Bright Horizons, Care.com)? </label>
+        <div class="radio" id="backupChildCare-group">
+          <label>
+            <input type="radio" name="survey[backupChildCare]" value="yes" <% if (survey.backupChildCare=="yes") { %> checked <% } %>> Yes
+          </label>
+          <label>
+            <input type="radio" name="survey[backupChildCare]" value="no" <% if (survey.backupChildCare=="no") { %> checked <% } %>> No
+          </label>
+          <label>
+            <input type="radio" name="survey[backupChildCare]" value="other" id="backupChildCare"<% if (survey.backupChildCare=="other") { %> checked <% } %>> Other
+          </label>                  
+        </div>
+        <input type="text" name="survey[backupChildCareOther]" id="backupChildCareOther" class="form-input"value="<%= survey.backupChildCareOther %>"></input>               
+      </div>  
+      <div class="form-group">
+        <label for="breastPumps" class="form-label">If your company is 50 people or more, does your company provide hospital grade breast pumps in mother's rooms? </label>
+        <div class="radio" id="breastPumps-group">
+          <label>
+            <input type="radio" name="survey[breastPumps]" value="yes" <% if (survey.breastPumps=="yes") { %> checked <% } %>> Yes
+          </label>
+          <label>
+            <input type="radio" name="survey[breastPumps]" value="no" <% if (survey.breastPumps=="no") { %> checked <% } %>> No
+          </label>
+          <label>
+            <input type="radio" name="survey[breastPumps]" id="breastPumps" value="other" <% if (survey.breastPumps=="other") { %> checked <% } %>> Other
+          </label> 
+        </div>
+        <input type="text" name="survey[breastPumpsOther]" id="breastPumpsOther" class="form-input"value="<%= survey.breastPumpsOther %>"></input>                                
+      </div>  
+      <div class="form-group" id="cryoPres-group">
+        <label for="cryoPres" class="form-label">Does your company offer insurance options that covers cryopreservation (egg freezing) at partial or full cost?</label>
+        <div class="radio">
+          <label>
+            <input type="radio" name="survey[cryoPres]" value="yes" <% if (survey.cryoPres=="yes") { %> checked <% } %>> Yes
+          </label>
+          <label>
+            <input type="radio" name="survey[cryoPres]" value="no" <% if (survey.cryoPres=="no") { %> checked <% } %>> No
+          </label>
+            <input type="radio" name="survey[cryoPres]" id="cryoPres" value="other" <% if (survey.cryoPres=="other") { %> checked <% } %>> Other
+          </label>                  
+        </div>
+        <input type="text" name="survey[cryoPresOther]" id="cryoPresOther" class="form-input"value="<%= survey.cryoPresOther %>"></input>                                
+      </div>  
+      <div class="form-group" id="otherInfo-group">
+        <label for="otherInfo" class="form-label">Is there anything else you'd like to tell us about your company's paid parental leave policies?</label>
+        <textArea name="survey[otherInfo]" id="otherInfo" class="form-input text-area" maxlength="250"><%= survey.otherInfo %></textArea>
+      </div>   
+      <div class="form-group" id="emailAddress-group">
+        <label for="emailAddress" class="form-label">Email address (optional):</label>
+        <input type="text" name="survey[emailAddress]" id="email" class="form-input"value="<%= survey.emailAddress %>"></input>
+      </div>         
+      <button type="submit" class="btn">Submit</button>
+    </form>
+  </div>
+  <br/>
+</body>
+</html>
+<script>
+  showHide("maternityPolicy", "maternityWeeks");
+  showHide("paternityPolicy", "paternityWeeks");
+  showHide("adoptivePolicy", "adoptiveWeeks");
+
+  showHideOnClick("maternityPolicy", "maternityWeeks");
+  showHideOnClick("paternityPolicy", "paternityWeeks");
+  showHideOnClick("adoptivePolicy", "adoptiveWeeks");
+
+  showHide("pronoun", "pronounOther");
+  showHide("equity", "equityOther");
+  showHide("equalLeave", "equalLeaveOther");
+  showHide("flexTime", "flexTimeOther");
+  showHide("onRamp", "onRampOther");
+  showHide("childCare", "childCareOther");
+  showHide("backupChildCare", "backupChildCareOther");
+  showHide("breastPumps", "breastPumpsOther");
+  showHide("cryoPres", "cryoPresOther");
+
+  showHideOnChange("pronoun-group", "pronoun", "pronounOther");
+  showHideOnChange("equity-group", "equity", "equityOther");
+  showHideOnChange("equalLeave-group", "equalLeave", "equalLeaveOther");
+  showHideOnClick("flexTime", "flexTimeOther");
+  showHideOnChange("onRamp-group", "onRamp", "onRampOther");
+  showHideOnClick("childCare", "childCareOther");
+  showHideOnChange("backupChildCare-group", "backupChildCare", "backupChildCareOther");
+  showHideOnChange("breastPumps-group", "breastPumps", "breastPumpsOther");
+  showHideOnChange("cryoPres-group", "cryoPres", "cryoPresOther");
+
+  function showHideOnChange(changeId, checkedId, showHideElement){
+    var changeElement = document.getElementById(changeId);
+    changeElement.addEventListener("change", function(){
+      showHide(checkedId, showHideElement);
+    });
+  }  
+  function showHideOnClick(clickElement, showHideElement){
+    var policyElement = document.getElementById(clickElement);
+    policyElement.addEventListener("click", function(){
+      showHide(clickElement, showHideElement);
+    });
+  }  
+  function showHide(checkElement, showHideElement){
+    if (document.getElementById(checkElement).checked) {
+      document.getElementById(showHideElement).classList.remove("hidden");
+    } else {
+      document.getElementById(showHideElement).classList.add("hidden");
+    }
+  }
+
+</script>
