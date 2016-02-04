@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var pg = require('pg');
 var bodyParser = require('body-parser')
+var escape = require("html-escape"); 
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -34,7 +35,7 @@ app.get('/results', function(request, response) {
   });
 });
 
-app.get('/complete-results', function(request, response) {
+/*app.get('/complete-results', function(request, response) {
   var url = process.env.DATABASE_URL;
   pg.connect(url, function(err, client, done) {
     if (err) throw err;
@@ -47,7 +48,7 @@ app.get('/complete-results', function(request, response) {
       }
     });
   });
-});
+});*/
 
 app.get('/survey-submit', function(request, response) {
   response.render('index', {survey:{}, errors:{}});
@@ -76,58 +77,58 @@ function aggregateCompleteResults(result){
     if(!aggResult[surveyId]){ //new row
       aggResult[surveyId] = 
       {
-        companyName: result.rows[i].company_name, 
+        companyName: escape(result.rows[i].company_name), 
 
-        pronoun: result.rows[i].pronoun, 
-        pronounOther: result.rows[i].pronoun_other, 
+        pronoun: escape(result.rows[i].pronoun), 
+        pronounOther: escape(result.rows[i].pronoun_other), 
 
-        ageRange: result.rows[i].age_range, 
+        ageRange: escape(result.rows[i].age_range), 
 
-        leaveWeeksTaken: result.rows[i].weeks_taken,
+        leaveWeeksTaken: escape(result.rows[i].weeks_taken),
 
-        equity: result.rows[i].equity, 
-        equityOther: result.rows[i].equity_other, 
+        equity: escape(result.rows[i].equity), 
+        equityOther: escape(result.rows[i].equity_other), 
 
-        equaLeave: result.rows[i].equal_leave, 
-        equalLeaveOther: result.rows[i].equal_leave_other, 
+        equaLeave: escape(result.rows[i].equal_leave), 
+        equalLeaveOther: escape(result.rows[i].equal_leave_other), 
 
-        flexTime: [result.rows[i].flex_time], 
-        flexTimeOther: result.rows[i].flex_time_other, 
+        flexTime: escape(result.rows[i].flex_time), 
+        flexTimeOther: escape(result.rows[i].flex_time_other), 
 
-        onRamp: result.rows[i].on_ramp, 
-        onRampOther: result.rows[i].on_ramp_other, 
+        onRamp: escape(result.rows[i].on_ramp), 
+        onRampOther: escape(result.rows[i].on_ramp_other), 
 
-        femaleVpLeave: result.rows[i].female_vp_leave, 
-        maleVpLeave: result.rows[i].male_vp_leave, 
+        femaleVpLeave: escape(result.rows[i].female_vp_leave), 
+        maleVpLeave: escape(result.rows[i].male_vp_leave), 
 
-        childCare: [result.rows[i].child_care], 
-        childCareOther: result.rows[i].child_care_other, 
+        childCare: escape(result.rows[i].child_care), 
+        childCareOther: escape(result.rows[i].child_care_other), 
 
-        backupChildCare: result.rows[i].backup_child_care,
-        backupChildCareOther: result.rows[i].backup_child_care_other, 
+        backupChildCare: escape(result.rows[i].backup_child_care),
+        backupChildCareOther: escape(result.rows[i].backup_child_care_other), 
 
-        breastPumps: result.rows[i].breast_pumps, 
-        breastPumpsOther: result.rows[i].breast_pumps_other, 
+        breastPumps: escape(result.rows[i].breast_pumps), 
+        breastPumpsOther: escape(result.rows[i].breast_pumps_other), 
 
-        cryoPreservation: result.rows[i].cryo_pres, 
-        cryoPresOther: result.rows[i].cryo_pres_other, 
+        cryoPreservation: escape(result.rows[i].cryo_pres), 
+        cryoPresOther: escape(result.rows[i].cryo_pres_other), 
 
-        otherInfo: result.rows[i].other_info, 
-        email: result.rows[i].email      
+        otherInfo: escape(result.rows[i].other_info), 
+        email: escape(result.rows[i].email)      
       };
     } 
     if(result.rows[i].leave_type == 'maternity'){
-      aggResult[surveyId].maternityPaidWeeks = result.rows[i].paid_weeks;
-      aggResult[surveyId].maternityPercentPay = result.rows[i].percent_pay;
-      aggResult[surveyId].maternityUnpaidWeeks = result.rows[i].unpaid_weeks;
+      aggResult[surveyId].maternityPaidWeeks = escape(result.rows[i].paid_weeks);
+      aggResult[surveyId].maternityPercentPay = escape(result.rows[i].percent_pay);
+      aggResult[surveyId].maternityUnpaidWeeks = escape(result.rows[i].unpaid_weeks);
     } else if(result.rows[i].leave_type == 'paternity'){
-      aggResult[surveyId].paternityPaidWeeks = result.rows[i].paid_weeks;
-      aggResult[surveyId].paternityPercentPay = result.rows[i].percent_pay;
-      aggResult[surveyId].paternityUnpaidWeeks = result.rows[i].unpaid_weeks;      
+      aggResult[surveyId].paternityPaidWeeks = escape(result.rows[i].paid_weeks);
+      aggResult[surveyId].paternityPercentPay = escape(result.rows[i].percent_pay);
+      aggResult[surveyId].paternityUnpaidWeeks = escape(result.rows[i].unpaid_weeks);      
     } else if(result.rows[i].leave_type == 'adoptive'){
-      aggResult[surveyId].adoptivePaidWeeks = result.rows[i].paid_weeks;
-      aggResult[surveyId].adoptivePercentPay = result.rows[i].percent_pay;
-      aggResult[surveyId].adoptiveUnpaidWeeks = result.rows[i].unpaid_weeks;      
+      aggResult[surveyId].adoptivePaidWeeks = escape(result.rows[i].paid_weeks);
+      aggResult[surveyId].adoptivePercentPay = escape(result.rows[i].percent_pay);
+      aggResult[surveyId].adoptiveUnpaidWeeks = escape(result.rows[i].unpaid_weeks);      
     } 
   }
 
